@@ -33,11 +33,13 @@ export default function (state = initialState.user, action) {
         }
 
         // Collect user's permissions
-        user.relationships.groups.data.forEach(({ id, type }) => {
-          let group = payload.included.find(entity => (entity.id === id) && (entity.type === type))
+        if (user.relationships.groups.data) {
+          user.relationships.groups.data.forEach(({ id, type }) => {
+            let group = payload.included.find(entity => (entity.id === id) && (entity.type === type))
 
-          group.attributes.permissions.forEach(permission => user.permissions.add(permission))
-        })
+            group.attributes.permissions.forEach(permission => user.permissions.add(permission))
+          })
+        }
 
         // Generate an Adorable avatar if the user doesn't already have one set
         user.attributes.image = payload.data.attributes.image || `//api.adorable.io/avatars/${payload.data.id}`

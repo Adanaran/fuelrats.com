@@ -47,7 +47,47 @@ export const getUser = () => async dispatch => {
 
 
 
-export const updateUser = (user) => async dispatch => {
+export const registerNickname = (nicknames, password) => async dispatch => {
+  dispatch({ type: actionTypes.REGISTER_NICKNAME })
+
+  try {
+    let token = localStorage.getItem('access_token')
+
+    let response = await fetch(`/api/nicknames`, {
+      body: JSON.stringify({
+        nicknames,
+        password,
+      }),
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }),
+      method: 'post',
+    })
+
+    response = await response.json()
+
+    dispatch({
+      status: 'success',
+      type: actionTypes.REGISTER_NICKNAME,
+      user: response.data,
+    })
+
+  } catch (error) {
+    dispatch({
+      status: 'error',
+      type: actionTypes.REGISTER_NICKNAME,
+    })
+
+    console.log(error)
+  }
+}
+
+
+
+
+
+export const updateUser = user => async dispatch => {
   dispatch({ type: actionTypes.UPDATE_USER })
 
   try {

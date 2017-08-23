@@ -13,6 +13,7 @@ import {
   actions,
   initStore,
 } from '../store'
+import AddNicknameForm from './AddNicknameForm'
 import Component from './Component'
 
 
@@ -28,6 +29,10 @@ class UserNicknamesPanel extends Component {
   render () {
     let { user } = this.props
 
+    if (!Array.isArray(user.attributes.nicknames)) {
+      user.attributes.nicknames = [user.attributes.nicknames]
+    }
+
     return (
       <div className="panel user-nicknames">
         <header>IRC Nicknames</header>
@@ -35,14 +40,11 @@ class UserNicknamesPanel extends Component {
         <div className="panel-content">
           <div className="row">
             <ul>
-              {user.attributes && user.attributes.nicknames && user.attributes.nicknames.map((nickname, index) => <li key={index}>{nickname}</li>)}
+              {(user.attributes && user.attributes.nicknames) && user.attributes.nicknames.map((nickname, index) => <li key={index}>{nickname}</li>)}
             </ul>
           </div>
 
-          <form className="row">
-            <input className="stretch-9" name="add-nickname" placeholder="Add a nickname..." type="text" />
-            <button data-action="add-nickname" type="submit">Add</button>
-          </form>
+          <AddNicknameForm />
         </div>
       </div>
     )
